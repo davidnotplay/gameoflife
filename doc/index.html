@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+  <style type="text/css">
+    :root {
+        --time: .4s;
+    }
+
+    body {
+        padding: 0;
+        margin: 0;
+        overflow: hidden;
+    }
+
+    #game-of-life {
+        background: #fff;
+    }
+
+    #icons-container {
+        height: 100vh;
+        left: 0;
+        position: fixed;
+        top: 0;
+        width: 100vw;
+        z-index: 999;
+        text-align: center;
+
+        display: none;
+        align-items: center;
+        transition: opacity .4s ease;
+    }
+
+    #icons-container img {
+        margin: auto;
+        width: 100px;
+        transition: width .4s ease;
+    }
+
+    #icons-container.icons-animation-start {
+        display: flex;
+        opacity: 1;
+    }
+
+    #icons-container.icons-animation-start img {
+        width: 100px;
+    }
+
+    #icons-container.icons-animation-start.icons-animation-end {
+        opacity: 0
+    }
+
+    #icons-container.icons-animation-end img {
+        width: 200px;
+    }
+
+
+  </style>
+</head>
+<body>
+  <div id="icons-container">
+    <img src="./images/play.svg" alt="play" id="play-icon"/>
+    <img src="./images/stop.svg" alt="stop" id="stop-icon"/>
+  </div>
+  <canvas id="game-of-life"></canvas>
+	<script type="text/javascript" src="doc.js"></script>
+</body>
+</html>
