@@ -14,10 +14,10 @@ const disabled int = matrix.MATRIX_POINT_DISABLED
 const enabled int = matrix.MATRIX_POINT_ENABLED
 
 type adjTest struct {
-	name string
-	position [3]int
+	name             string
+	position         [3]int
 	adjacentsEnabled []Position
-	countEnabled int
+	countEnabled     int
 }
 
 // Make new game.
@@ -99,49 +99,49 @@ func TestCoundAdjacentsFunc(t *testing.T) {
 		{
 			"test 1, left-top",
 			[3]int{0, 0, disabled},
-			[]Position{{2, 2},},
+			[]Position{{2, 2}},
 			0,
 		},
 		{
 			"test 1, enabled, left-top",
 			[3]int{0, 0, enabled},
-			[]Position{{2, 2},},
+			[]Position{{2, 2}},
 			0,
 		},
 		{
 			"test 2, left-top",
 			[3]int{0, 0, disabled},
-			[]Position{{1, 0}, {2, 2},},
+			[]Position{{1, 0}, {2, 2}},
 			1,
 		},
 		{
 			"test 3, left-top",
 			[3]int{0, 0, disabled},
-			[]Position{{1, 0}, {0, 1}, {2, 2},},
+			[]Position{{1, 0}, {0, 1}, {2, 2}},
 			2,
 		},
 		{
 			"test 4, left-top",
 			[3]int{0, 0, disabled},
-			[]Position{{1, 0}, {1, 1}, {0, 1}, {2, 2},},
+			[]Position{{1, 0}, {1, 1}, {0, 1}, {2, 2}},
 			3,
 		},
 		{
 			"test 1, left-middle",
 			[3]int{0, 5, disabled},
-			[]Position{{9, 9},},
+			[]Position{{9, 9}},
 			0,
 		},
 		{
 			"test 2, left-middle",
 			[3]int{0, 5, enabled},
-			[]Position{{0, 4}, {0, 6}, {9, 9},},
+			[]Position{{0, 4}, {0, 6}, {9, 9}},
 			2,
 		},
 		{
 			"test 3, left-middle",
 			[3]int{0, 5, enabled},
-			[]Position{{0, 4}, {0, 6}, {1, 5}, {9, 9},},
+			[]Position{{0, 4}, {0, 6}, {1, 5}, {9, 9}},
 			3,
 		},
 		{
@@ -254,8 +254,7 @@ func TestCoundAdjacentsFunc(t *testing.T) {
 		},
 	}
 
-
-	for _, adt := range(positions) {
+	for _, adt := range positions {
 		g.matrix.Reset()
 		auxEnablePositions(g, adt.adjacentsEnabled)
 		x, y := adt.position[0], adt.position[1]
@@ -292,7 +291,6 @@ func TestRule1InFuncRule(t *testing.T) {
 	assert := assert.New(t)
 	var err error = nil
 
-
 	// 2 live cell adjacents.
 	g, _ := New(min, min, []Position{{0, 0}, {1, 1}, {2, 2}})
 
@@ -310,7 +308,6 @@ func TestRule1InFuncRule(t *testing.T) {
 	assert.Equal(err, nil, "There is an error.j")
 	assert.Equal(enabled, true, "The point 1x1 is disabled.")
 }
-
 
 // When a live cell is adjacents to 1 or more than 3 live cells this dead.
 func TestRule2InFuncRule(t *testing.T) {
@@ -333,7 +330,6 @@ func TestRule2InFuncRule(t *testing.T) {
 	assert.Equal(err, nil, "There is an error.")
 	assert.Equal(enabled, false, "The point is enabled.")
 }
-
 
 // When a dead cell is adjacents to number different of 3 live cells it continues dead.
 func TestRule3InFuncRule(t *testing.T) {
@@ -369,4 +365,56 @@ func TestRule4InFuncRule(t *testing.T) {
 	enabled, _ := g.GetMatrix().IsEnabled(1, 1)
 	assert.Equal(err, nil, "There is an error.")
 	assert.Equal(enabled, true, "The point is disabled.")
+}
+
+// Test when the function `game.rules` generate an error.
+func TestErrorInFuncrule(t *testing.T) {
+	var err error = nil
+	assert := assert.New(t)
+
+	g, _ := New(min, min, []Position{})
+	g.rules(true, 0, 11, 11, &err)
+	assert.Equal(err, matrix.OutIndexError(g.matrix, 11, 11), "The error does not match.")
+}
+
+// Testing the function `game.Cycle`
+func TestCycleFunc(t *testing.T) {
+	g, _ := New(min, min, []Position{{1, 1}, {2, 1}, {3, 1}})
+	assert := assert.New(t)
+	message := "The position %dx%d is %s"
+	pointStr := map[bool]string{true: "enabled", false: "disable"}
+	positions := map[Position]bool{{2, 0}: true, {2, 1}: true, {2, 2}: true}
+
+	//  run cycle
+	err := g.Cycle()
+
+	// no error
+	assert.Equal(err, nil, "There is an error.")
+
+	// Check the point status.
+	for i := 0; i < g.matrix.GetWidth(); i++ {
+		for j := 0; j < g.matrix.GetHeight(); j++ {
+			enabled, _ := g.matrix.IsEnabled(i, j)
+			_, ok := positions[Position{i, j}]
+			assert.Equal(enabled, ok, fmt.Sprintf(message, i, j, pointStr[enabled]))
+
+		}
+	}
+
+	// run new cycle
+	positions = map[Position]bool{{1, 1}: true, {2, 1}: true, {3, 1}: true}
+	err = g.Cycle()
+
+	// no error
+	assert.Equal(err, nil, "There is an error.")
+
+	// Check the point status.
+	for i := 0; i < g.matrix.GetWidth(); i++ {
+		for j := 0; j < g.matrix.GetHeight(); j++ {
+			enabled, _ := g.matrix.IsEnabled(i, j)
+			_, ok := positions[Position{i, j}]
+			assert.Equal(enabled, ok, fmt.Sprintf(message, i, j, pointStr[enabled]))
+
+		}
+	}
 }
