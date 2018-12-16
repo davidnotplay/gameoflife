@@ -91,7 +91,9 @@ func TestEnablePointError(t *testing.T) {
 	assert.Equal(err, OutIndexError(m, min, min), "The error does not match.")
 
 	err = m.EnablePoint(-1, -1)
-	assert.Equal(err, OutIndexError(m, -1, -1), "The error does not match.") }
+	assert.Equal(err, OutIndexError(m, -1, -1), "The error does not match.")
+}
+
 // Test the function DisablePoint
 func TestDisablePoint(t *testing.T) {
 	assert := assert.New(t)
@@ -158,7 +160,6 @@ func TestResetMatrix(t *testing.T) {
 		}
 	}
 }
-
 
 // Test the functio GetWidth
 func TestGetWidth(t *testing.T) {

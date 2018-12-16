@@ -2,9 +2,9 @@ package gui
 
 import (
 	"fmt"
-	"time"
-	"github.com/gopherjs/gopherjs/js"
 	"github.com/davidnotplay/gameoflife/game"
+	"github.com/gopherjs/gopherjs/js"
+	"time"
 )
 
 const iconsContainerId string = "icons-container"
@@ -20,7 +20,6 @@ func showIcon(icon string) {
 	})
 
 	iconSel.Set("style", "display:block")
-
 
 	container.Set("className", "icons-animation-start")
 	// /** @TODO mejorar animacion. */
@@ -57,7 +56,6 @@ func togglePlayingGame(canvas *Canvas) {
 	println("Playing")
 }
 
-
 func Start() {
 	var canvas *Canvas
 	canvas, _ = NewCanvas(&[]game.Position{})
@@ -86,7 +84,7 @@ func Start() {
 	js.Global.Get("window").Call("addEventListener", "resize", func(evt *js.Object) {
 		go func() {
 			canvas.Stop()
-			canvas, _ = NewCanvas(&[]game.Position{});
+			canvas, _ = NewCanvas(&[]game.Position{})
 		}()
 	})
 }

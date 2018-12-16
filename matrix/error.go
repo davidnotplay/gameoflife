@@ -37,7 +37,6 @@ func OutIndexError(m *Matrix, x, y int) error {
 	return &err
 }
 
-
 func InvalidSizeError(width, height int) error {
 	return &invalidSizeError{width, height}
 }

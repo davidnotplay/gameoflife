@@ -1,11 +1,11 @@
 package gui
 
 import (
-	"time"
-	"math"
-	"github.com/gopherjs/gopherjs/js"
 	"github.com/davidnotplay/gameoflife/game"
 	"github.com/davidnotplay/gameoflife/matrix"
+	"github.com/gopherjs/gopherjs/js"
+	"math"
+	"time"
 )
 
 // Constant pixels per points.
@@ -30,7 +30,7 @@ func getCanvas() *js.Object {
 }
 
 // Get the game size (width, height) depending of the window browser size.
-func getGameSize() (int, int){
+func getGameSize() (int, int) {
 	canvas := js.Global.Get("document").Call("getElementById", "game-of-life")
 
 	// Set the canvas size using the windows size.
@@ -40,14 +40,14 @@ func getGameSize() (int, int){
 	canvas.Set("height", wh)
 
 	// Generate the matrix size using the window size.
-	gw := int(math.Ceil(ww/float64(ppp)))
-	gh := int(math.Ceil(wh/float64(ppp)))
+	gw := int(math.Ceil(ww / float64(ppp)))
+	gh := int(math.Ceil(wh / float64(ppp)))
 
 	return gw, gh
 }
 
 // Make the canvas using the matrix data.
-func (self *Canvas)generate() error {
+func (self *Canvas) generate() error {
 	matrix := self.game.GetMatrix()
 	w, h := matrix.GetWidth(), matrix.GetHeight()
 	ctx := self.canvas.Call("getContext", "2d")
@@ -60,7 +60,7 @@ func (self *Canvas)generate() error {
 			}
 
 			ctx.Set("fillStyle", pointColors[enabled])
-			ctx.Call("fillRect", i*ppp+1, j*ppp+1, ppp - 1, ppp - 1)
+			ctx.Call("fillRect", i*ppp+1, j*ppp+1, ppp-1, ppp-1)
 		}
 	}
 
@@ -89,10 +89,10 @@ func NewCanvas(p *[]game.Position) (*Canvas, error) {
 	return canvas, nil
 }
 
-func (self *Canvas)run() error {
+func (self *Canvas) run() error {
 	var err error
 
-	for ;self.playing; {
+	for self.playing {
 		time.Sleep(200 * time.Millisecond)
 		err = self.game.Cycle()
 
@@ -110,21 +110,21 @@ func (self *Canvas)run() error {
 	return nil
 }
 
-func (self *Canvas)Start() error {
+func (self *Canvas) Start() error {
 	self.playing = true
 	return self.run()
 }
 
-func (self *Canvas)Stop() {
+func (self *Canvas) Stop() {
 	self.playing = false
 }
 
 // Returns the js object where are saved the canvas.
-func (self *Canvas)GetJsCanvas() *js.Object {
+func (self *Canvas) GetJsCanvas() *js.Object {
 	return self.canvas
 }
 
-func (self *Canvas)ToggleMatrixPoint(x, y int) error {
+func (self *Canvas) ToggleMatrixPoint(x, y int) error {
 	var err error = nil
 	mx := x / ppp
 	my := y / ppp
@@ -150,7 +150,6 @@ func (self *Canvas)ToggleMatrixPoint(x, y int) error {
 	return err
 }
 
-func (self *Canvas)IsPlaying() bool {
+func (self *Canvas) IsPlaying() bool {
 	return self.playing
 }
-
