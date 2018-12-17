@@ -2,61 +2,60 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title></title>
-  <style type="text/css">
-    :root {
-        --time: .4s;
-    }
+	<title>Game of life</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
+    <style type="text/css">
+        @keyframes icons {
+            from {
+                width: 10%;
+                opacity: 1;
+            }
 
-    body {
-        padding: 0;
-        margin: 0;
-        overflow: hidden;
-    }
+            to {
+                width: 20%;
+                opacity: 0;
+            }
+        }
 
-    #game-of-life {
-        background: #fff;
-    }
+        body {
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+        }
 
-    #icons-container {
-        height: 100vh;
-        left: 0;
-        position: fixed;
-        top: 0;
-        width: 100vw;
-        z-index: 999;
-        text-align: center;
+        #game-of-life {
+            background: #888;
+        }
 
-        display: none;
-        align-items: center;
-        transition: opacity .4s ease;
-    }
+        #icons-container {
+            height: 100vh;
+            left: 0;
+            position: fixed;
+            top: 0;
+            width: 100vw;
+            z-index: 999;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
 
-    #icons-container img {
-        margin: auto;
-        width: 100px;
-        transition: width .4s ease;
-    }
+            display: none;
+        }
 
-    #icons-container.icons-animation-start {
-        display: flex;
-        opacity: 1;
-    }
+        #icons-container.show {
+            display: flex;
+        }
 
-    #icons-container.icons-animation-start img {
-        width: 100px;
-    }
+        #icons-container img {
+            width: 10%;
+        }
 
-    #icons-container.icons-animation-start.icons-animation-end {
-        opacity: 0
-    }
-
-    #icons-container.icons-animation-end img {
-        width: 200px;
-    }
+        #icons-container img.start-animation {
+            animation-duration: .4s;
+            animation-name: icons;
+        }
 
 
-  </style>
+    </style>
 </head>
 <body>
   <div id="icons-container">

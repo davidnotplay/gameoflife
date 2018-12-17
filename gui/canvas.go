@@ -2,7 +2,6 @@ package gui
 
 import (
 	"github.com/davidnotplay/gameoflife/game"
-	"github.com/davidnotplay/gameoflife/matrix"
 	"github.com/gopherjs/gopherjs/js"
 	"math"
 	"time"
@@ -12,7 +11,7 @@ import (
 const ppp int = 14
 
 // Canvas color cells whe these are enabled or disabled.
-var pointColors map[bool]string = map[bool]string{false: "#444", true: "#ff0"}
+var pointColors map[bool]string = map[bool]string{false: "#666666", true: "#ffeb3b"}
 
 type Canvas struct {
 	// Js canvas object.

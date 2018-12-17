@@ -17,15 +17,12 @@ func showIcon(icon string) {
 	// Show and hide the images.
 	js.Global.Get("Array").Call("from", icons).Call("forEach", func(icon *js.Object) {
 		icon.Set("style", "display:none")
+		icon.Set("className", "")
 	})
-
+	container.Set("className", "show")
 	iconSel.Set("style", "display:block")
+	iconSel.Set("className", "start-animation")
 
-	container.Set("className", "icons-animation-start")
-	// /** @TODO mejorar animacion. */
-	time.Sleep(10 * time.Millisecond) // add time sleep to make the css animation.
-
-	container.Set("className", "icons-animation-start icons-animation-end")
 	time.Sleep(400 * time.Millisecond)
 	container.Set("className", "")
 }
