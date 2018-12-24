@@ -8,14 +8,25 @@ import (
 )
 
 const iconsContainerId string = "icons-container"
+const inVarName string = "menuInterval"
+const aEleSelector string = "#menu-container .animation"
+
+// Transform an javascript object in javascript array
+func objToArray(arr *js.Object) *js.Object {
+	return js.Global.Get("Array").Call("from", arr)
+}
+
+func getById(id string) *js.Object {
+	return js.Global.Get("document").Call("getElementById", id)
+}
 
 func showIcon(icon string) {
-	container := js.Global.Get("document").Call("getElementById", iconsContainerId)
+	container := getById(iconsContainerId)
 	icons := container.Call("getElementsByTagName", "img")
 	iconSel := container.Call("querySelector", fmt.Sprintf("#%s", icon))
 
 	// Show and hide the images.
-	js.Global.Get("Array").Call("from", icons).Call("forEach", func(icon *js.Object) {
+	objToArray(icons).Call("forEach", func(icon *js.Object) {
 		icon.Set("style", "display:none")
 		icon.Set("className", "")
 	})
@@ -33,10 +44,13 @@ func handlerError(err error) {
 }
 
 func togglePlayingGame(canvas *Canvas) {
+	gameItemImg := getById("menu-game").Call("getElementsByTagName", "img").Index(0)
+
 	if canvas.IsPlaying() {
 		canvas.Stop()
 		showIcon("stop-icon")
 		println("Stoped")
+		gameItemImg.Set("src", "./images/play-b.svg")
 
 		return
 	}
@@ -51,6 +65,78 @@ func togglePlayingGame(canvas *Canvas) {
 
 	showIcon("play-icon")
 	println("Playing")
+	gameItemImg.Set("src", "./images/stop-b.svg")
+}
+
+func showModal(modalId string) {
+	modalc := getById("modal-container")
+	modals := modalc.Call("querySelector", "#modal-container > div")
+	modals = objToArray(modals)
+
+	// hidden the modals.
+	for i := 0; i < modals.Get("length").Int(); i++ {
+		modals.Index(i).Set("style", "display: none")
+	}
+
+
+	// show the modal selected.
+	getById(modalId).Set("style", "display: block")
+	// make animatiion.
+	modalc.Set("className", "show-modal")
+}
+
+func handleMenu(canvas *Canvas) {
+	// set global variable will save the interval.
+	js.Global.Set(inVarName, nil)
+
+	// Get the elements animatables.
+	aElems := objToArray(js.Global.Get("document").Call("querySelectorAll", aEleSelector))
+
+	// func to changes the class in animatables elements.
+	changeClass := func(cname string) {
+		for i := 0; i < aElems.Get("length").Int(); i++ {
+			aElems.Index(i).Set("className", cname)
+		}
+	}
+
+	// Event will show the animate elements when the mouse is moved.
+	canvas.GetJsCanvas().Call("addEventListener", "mousemove", func() { //  mousemove event.
+		go func() {
+			intId := js.Global.Get(inVarName)
+
+			if intId != nil {
+				js.Global.Call("clearTimeout", intId)
+			} else {
+				changeClass("animation animation-enter")
+			}
+
+			intId = js.Global.Call("setTimeout",
+				func() {
+					changeClass("animation animation-leave")
+					js.Global.Set(inVarName, nil)
+				},
+				3000,
+			)
+
+			js.Global.Set(inVarName, intId)
+		}()
+	})
+
+	// On-click info menu item
+	getById("menu-info").Call("addEventListener", "click", func(evt *js.Object) {
+		go func() {
+			evt.Call("preventDefault")
+			showModal("modal-info")
+		}()
+	})
+
+	// on click game menu item.
+	getById("menu-game").Call("addEventListener", "click", func(evt *js.Object) {
+		go func() {
+			evt.Call("preventDefault")
+			togglePlayingGame(canvas)
+		}()
+	})
 }
 
 func Start() {
@@ -84,4 +170,18 @@ func Start() {
 			canvas, _ = NewCanvas(&[]game.Position{})
 		}()
 	})
+
+	handleMenu(canvas)
+
+	// Close modal function.
+	closeModalFun := func() {
+		go func() {
+			getById("modal-container").Set("className", "hide-modal")
+		}()
+	}
+
+	// Close modal when it clicks in the button.
+	getById("close-modal").Call("addEventListener", "click", closeModalFun)
+	// Close modal when it clicks in the modal overlay.
+	getById("modal-container").Call("addEventListener", "click", closeModalFun)
 }

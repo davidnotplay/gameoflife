@@ -3,66 +3,64 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Game of life</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
-    <style type="text/css">
-        @keyframes icons {
-            from {
-                width: 10%;
-                opacity: 1;
-            }
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,400i" rel="stylesheet">
+    <link href="./style.css" rel="stylesheet">
 
-            to {
-                width: 20%;
-                opacity: 0;
-            }
-        }
-
-        body {
-            padding: 0;
-            margin: 0;
-            overflow: hidden;
-        }
-
-        #game-of-life {
-            background: #888;
-        }
-
-        #icons-container {
-            height: 100vh;
-            left: 0;
-            position: fixed;
-            top: 0;
-            width: 100vw;
-            z-index: 999;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-
-            display: none;
-        }
-
-        #icons-container.show {
-            display: flex;
-        }
-
-        #icons-container img {
-            width: 10%;
-        }
-
-        #icons-container img.start-animation {
-            animation-duration: .4s;
-            animation-name: icons;
-        }
-
-
-    </style>
 </head>
 <body>
-  <div id="icons-container">
-    <img src="./images/play.svg" alt="play" id="play-icon"/>
-    <img src="./images/stop.svg" alt="stop" id="stop-icon"/>
-  </div>
-  <canvas id="game-of-life"></canvas>
-	<script type="text/javascript" src="doc.js"></script>
+    <div id="icons-container">
+        <img src="./images/play.svg" alt="play" id="play-icon"/>
+        <img src="./images/stop.svg" alt="stop" id="stop-icon"/>
+    </div>
+    <canvas id="game-of-life"></canvas>
+    <ul id="menu-container">
+        <li id="menu-github">
+            <a href="" class="animation animation-leave">
+                <img src="./images/github.svg">
+            </a>
+        </li>
+
+        <li id="menu-info">
+            <a href="" class="animation animation-leave">
+                <img src="./images/info.svg">
+            </a>
+        </li>
+
+        <li id="menu-game">
+            <a href="" class="animation animation-leave">
+                <img src="./images/play-b.svg">
+            </a>
+        </li>
+  </ul>
+
+    <div id="modal-container">
+        <div id="modal">
+            <button type="button" id="close-modal">
+                <img src="./images/close.svg" alt="close">
+            </button>
+            <div id="modal-info">
+                <h3>Game of Life</h3>
+                <div>
+                    <p>
+                        Game of life is a game of 0 players.
+                        You define the initial state clicking in the game cells; and press
+                        space for start the game. In each cycle the cells will evolve using a
+                        basic rules.
+                        <a href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life">
+                            More info about this game
+                        </a>
+                    </p>
+                    <p>
+                        This version of the game is maded using
+                        <a href="https://golang.org/">Go</a> and compiled in javascript with
+                        <a href="https://github.com/gopherjs/gopherjs">GopherJS</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script type="text/javascript" src="doc.js"></script>
 </body>
 </html>
