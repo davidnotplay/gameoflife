@@ -43,6 +43,21 @@ func handlerError(err error) {
 	js.Global.Call("alert", "Error")
 }
 
+
+func getFuncWillShowGameInfo() func(c *Canvas) {
+	msgEl := getById("menu-message")
+	msg := "Size: %dx%d. Cells enabled %d. Cycles: %d."
+
+	return func(c *Canvas) {
+		m := c.game.GetMatrix()
+		w, h, p := m.GetWidth(), m.GetHeight(), m.GetPointsEnabled()
+		cn := c.game.GetCyclesNum()
+		text := fmt.Sprintf(msg, w, h, p, cn)
+		msgEl.Set("innerHTML", text)
+	}
+}
+
+
 func togglePlayingGame(canvas *Canvas) {
 	gameItemImg := getById("menu-game").Call("getElementsByTagName", "img").Index(0)
 
@@ -57,7 +72,7 @@ func togglePlayingGame(canvas *Canvas) {
 
 	// Start the game async
 	go func() {
-		if err := canvas.Start(); err != nil {
+		if err := canvas.Start(getFuncWillShowGameInfo()); err != nil {
 			canvas.Stop()
 			handlerError(err)
 		}

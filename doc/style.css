@@ -11,8 +11,13 @@
 }
 
 @keyframes menu-enter {
-	from { opacity: 0 }
-	to { opacity: 1 }
+	from { 
+		opacity: 0 
+	}
+
+	to { 
+		opacity: 1 
+	}
 }
 
 @keyframes menu-leave {
@@ -111,11 +116,13 @@ body {
 #menu-container {
 	top: 0;
 	left: 0;
+	z-index:100
+}
+
+#menu-container ul {
 	list-style: none;
 	margin: 0;
 	padding: 0;
-
-	z-index:100
 }
 
 #menu-container li {
@@ -164,8 +171,18 @@ body {
 #menu-container li#menu-game{
 	top: 172px;
 }
-#menu-container li#menu-info a {
-	background-color: #2196f3;
+#menu-container li#menu-game a {
+	background-color: #ff3d00;
+}
+
+#menu-container #menu-message {
+	margin: 0;
+	position: fixed;
+	top: 0;
+	left: 1vw;
+	background: rgba(80, 80, 80, .8);
+	color: #fafafa;
+	padding: 2px 6px;
 }
 
 

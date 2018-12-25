@@ -88,7 +88,7 @@ func NewCanvas(p *[]game.Position) (*Canvas, error) {
 	return canvas, nil
 }
 
-func (self *Canvas) run() error {
+func (self *Canvas) run(callback func(canvas *Canvas)) error {
 	var err error
 
 	for self.playing {
@@ -104,14 +104,16 @@ func (self *Canvas) run() error {
 		if err != nil {
 			return err
 		}
+
+		callback(self)
 	}
 
 	return nil
 }
 
-func (self *Canvas) Start() error {
+func (self *Canvas) Start(callback func(canvas *Canvas)) error {
 	self.playing = true
-	return self.run()
+	return self.run(callback)
 }
 
 func (self *Canvas) Stop() {
