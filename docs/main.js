@@ -19029,17 +19029,19 @@ $packages["github.com/davidnotplay/gameoflife/matrix"] = (function() {
 		this.position = position_;
 	});
 	invalidSizeError = $pkg.invalidSizeError = $newType(8, $kindArray, "matrix.invalidSizeError", true, "github.com/davidnotplay/gameoflife/matrix", false, null);
-	Matrix = $pkg.Matrix = $newType(0, $kindStruct, "matrix.Matrix", true, "github.com/davidnotplay/gameoflife/matrix", true, function(matrix_, width_, height_) {
+	Matrix = $pkg.Matrix = $newType(0, $kindStruct, "matrix.Matrix", true, "github.com/davidnotplay/gameoflife/matrix", true, function(matrix_, width_, height_, enabled_) {
 		this.$val = this;
 		if (arguments.length === 0) {
 			this.matrix = sliceType$2.nil;
 			this.width = 0;
 			this.height = 0;
+			this.enabled = 0;
 			return;
 		}
 		this.matrix = matrix_;
 		this.width = width_;
 		this.height = height_;
+		this.enabled = enabled_;
 	});
 	sliceType = $sliceType($emptyInterface);
 	arrayType = $arrayType($Int, 2);
@@ -19118,29 +19120,41 @@ $packages["github.com/davidnotplay/gameoflife/matrix"] = (function() {
 			err = InvalidSizeError(width, height);
 			return [ptrType$1.nil, err];
 		}
-		m = new Matrix.ptr(createEmptyMatrixArray(width, height), width, height);
+		m = new Matrix.ptr(createEmptyMatrixArray(width, height), width, height, 0);
 		return [m, $ifaceNil];
 	};
 	$pkg.New = New;
 	Matrix.ptr.prototype.EnablePoint = function(x, y) {
-		var e, self, x, x$1, x$2, y;
+		var e, self, x, x$1, x$2, x$3, x$4, y;
 		e = $ifaceNil;
 		self = this;
 		e = checkRange(self, x, y);
-		if ($interfaceIsEqual(e, $ifaceNil)) {
-			(x$1 = (x$2 = self.matrix, ((x < 0 || x >= x$2.$length) ? ($throwRuntimeError("index out of range"), undefined) : x$2.$array[x$2.$offset + x])), ((y < 0 || y >= x$1.$length) ? ($throwRuntimeError("index out of range"), undefined) : x$1.$array[x$1.$offset + y] = 1));
+		if (!($interfaceIsEqual(e, $ifaceNil))) {
+			e = e;
+			return e;
 		}
+		if (!(((x$1 = (x$2 = self.matrix, ((x < 0 || x >= x$2.$length) ? ($throwRuntimeError("index out of range"), undefined) : x$2.$array[x$2.$offset + x])), ((y < 0 || y >= x$1.$length) ? ($throwRuntimeError("index out of range"), undefined) : x$1.$array[x$1.$offset + y])) === 1))) {
+			(x$3 = (x$4 = self.matrix, ((x < 0 || x >= x$4.$length) ? ($throwRuntimeError("index out of range"), undefined) : x$4.$array[x$4.$offset + x])), ((y < 0 || y >= x$3.$length) ? ($throwRuntimeError("index out of range"), undefined) : x$3.$array[x$3.$offset + y] = 1));
+			self.enabled = self.enabled + (1) >> 0;
+		}
+		e = $ifaceNil;
 		return e;
 	};
 	Matrix.prototype.EnablePoint = function(x, y) { return this.$val.EnablePoint(x, y); };
 	Matrix.ptr.prototype.DisablePoint = function(x, y) {
-		var e, self, x, x$1, x$2, y;
+		var e, self, x, x$1, x$2, x$3, x$4, y;
 		e = $ifaceNil;
 		self = this;
 		e = checkRange(self, x, y);
-		if ($interfaceIsEqual(e, $ifaceNil)) {
-			(x$1 = (x$2 = self.matrix, ((x < 0 || x >= x$2.$length) ? ($throwRuntimeError("index out of range"), undefined) : x$2.$array[x$2.$offset + x])), ((y < 0 || y >= x$1.$length) ? ($throwRuntimeError("index out of range"), undefined) : x$1.$array[x$1.$offset + y] = 0));
+		if (!($interfaceIsEqual(e, $ifaceNil))) {
+			e = e;
+			return e;
 		}
+		if (!(((x$1 = (x$2 = self.matrix, ((x < 0 || x >= x$2.$length) ? ($throwRuntimeError("index out of range"), undefined) : x$2.$array[x$2.$offset + x])), ((y < 0 || y >= x$1.$length) ? ($throwRuntimeError("index out of range"), undefined) : x$1.$array[x$1.$offset + y])) === 0))) {
+			(x$3 = (x$4 = self.matrix, ((x < 0 || x >= x$4.$length) ? ($throwRuntimeError("index out of range"), undefined) : x$4.$array[x$4.$offset + x])), ((y < 0 || y >= x$3.$length) ? ($throwRuntimeError("index out of range"), undefined) : x$3.$array[x$3.$offset + y] = 0));
+			self.enabled = self.enabled - (1) >> 0;
+		}
+		e = $ifaceNil;
 		return e;
 	};
 	Matrix.prototype.DisablePoint = function(x, y) { return this.$val.DisablePoint(x, y); };
@@ -19198,6 +19212,12 @@ $packages["github.com/davidnotplay/gameoflife/matrix"] = (function() {
 		return [self.width, self.height];
 	};
 	Matrix.prototype.GetSize = function() { return this.$val.GetSize(); };
+	Matrix.ptr.prototype.GetPointsEnabled = function() {
+		var self;
+		self = this;
+		return self.enabled;
+	};
+	Matrix.prototype.GetPointsEnabled = function() { return this.$val.GetPointsEnabled(); };
 	Matrix.ptr.prototype.String = function() {
 		var _r, matrix, msg, $s, $r;
 		/* */ $s = 0; var $f, $c = false; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; _r = $f._r; matrix = $f.matrix; msg = $f.msg; $s = $f.$s; $r = $f.$r; } s: while (true) { switch ($s) { case 0:
@@ -19211,10 +19231,10 @@ $packages["github.com/davidnotplay/gameoflife/matrix"] = (function() {
 	ptrType$2.methods = [{prop: "Error", name: "Error", pkg: "", typ: $funcType([], [$String], false)}];
 	ptrType.methods = [{prop: "Error", name: "Error", pkg: "", typ: $funcType([], [$String], false)}];
 	Matrix.methods = [{prop: "String", name: "String", pkg: "", typ: $funcType([], [$String], false)}];
-	ptrType$1.methods = [{prop: "EnablePoint", name: "EnablePoint", pkg: "", typ: $funcType([$Int, $Int], [$error], false)}, {prop: "DisablePoint", name: "DisablePoint", pkg: "", typ: $funcType([$Int, $Int], [$error], false)}, {prop: "IsEnabled", name: "IsEnabled", pkg: "", typ: $funcType([$Int, $Int], [$Bool, $error], false)}, {prop: "Reset", name: "Reset", pkg: "", typ: $funcType([], [], false)}, {prop: "GetPoint", name: "GetPoint", pkg: "", typ: $funcType([$Int, $Int], [$Int, $error], false)}, {prop: "GetWidth", name: "GetWidth", pkg: "", typ: $funcType([], [$Int], false)}, {prop: "GetHeight", name: "GetHeight", pkg: "", typ: $funcType([], [$Int], false)}, {prop: "GetSize", name: "GetSize", pkg: "", typ: $funcType([], [$Int, $Int], false)}];
+	ptrType$1.methods = [{prop: "EnablePoint", name: "EnablePoint", pkg: "", typ: $funcType([$Int, $Int], [$error], false)}, {prop: "DisablePoint", name: "DisablePoint", pkg: "", typ: $funcType([$Int, $Int], [$error], false)}, {prop: "IsEnabled", name: "IsEnabled", pkg: "", typ: $funcType([$Int, $Int], [$Bool, $error], false)}, {prop: "Reset", name: "Reset", pkg: "", typ: $funcType([], [], false)}, {prop: "GetPoint", name: "GetPoint", pkg: "", typ: $funcType([$Int, $Int], [$Int, $error], false)}, {prop: "GetWidth", name: "GetWidth", pkg: "", typ: $funcType([], [$Int], false)}, {prop: "GetHeight", name: "GetHeight", pkg: "", typ: $funcType([], [$Int], false)}, {prop: "GetSize", name: "GetSize", pkg: "", typ: $funcType([], [$Int, $Int], false)}, {prop: "GetPointsEnabled", name: "GetPointsEnabled", pkg: "", typ: $funcType([], [$Int], false)}];
 	outIndexError.init("github.com/davidnotplay/gameoflife/matrix", [{prop: "size", name: "size", embedded: false, exported: false, typ: arrayType, tag: ""}, {prop: "position", name: "position", embedded: false, exported: false, typ: arrayType, tag: ""}]);
 	invalidSizeError.init($Int, 2);
-	Matrix.init("github.com/davidnotplay/gameoflife/matrix", [{prop: "matrix", name: "matrix", embedded: false, exported: false, typ: sliceType$2, tag: ""}, {prop: "width", name: "width", embedded: false, exported: false, typ: $Int, tag: ""}, {prop: "height", name: "height", embedded: false, exported: false, typ: $Int, tag: ""}]);
+	Matrix.init("github.com/davidnotplay/gameoflife/matrix", [{prop: "matrix", name: "matrix", embedded: false, exported: false, typ: sliceType$2, tag: ""}, {prop: "width", name: "width", embedded: false, exported: false, typ: $Int, tag: ""}, {prop: "height", name: "height", embedded: false, exported: false, typ: $Int, tag: ""}, {prop: "enabled", name: "enabled", embedded: false, exported: false, typ: $Int, tag: ""}]);
 	$init = function() {
 		$pkg.$init = function() {};
 		/* */ var $f, $c = false, $s = 0, $r; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; $s = $f.$s; $r = $f.$r; } s: while (true) { switch ($s) { case 0:
@@ -19377,7 +19397,13 @@ $packages["github.com/davidnotplay/gameoflife/game"] = (function() {
 		/* */ } catch(err) { $err = err; } finally { $callDeferred($deferred, $err); if (!$curGoroutine.asleep) { return  err; } }
 	};
 	Game.prototype.Cycle = function() { return this.$val.Cycle(); };
-	ptrType.methods = [{prop: "countAdjacents", name: "countAdjacents", pkg: "github.com/davidnotplay/gameoflife/game", typ: $funcType([$Int, $Int], [$Int], false)}, {prop: "GetMatrix", name: "GetMatrix", pkg: "", typ: $funcType([], [ptrType$2], false)}, {prop: "rules", name: "rules", pkg: "github.com/davidnotplay/gameoflife/game", typ: $funcType([$Bool, $Int, $Int, $Int, ptrType$1], [], false)}, {prop: "Cycle", name: "Cycle", pkg: "", typ: $funcType([], [$error], false)}];
+	Game.ptr.prototype.GetCyclesNum = function() {
+		var self;
+		self = this;
+		return self.cycles;
+	};
+	Game.prototype.GetCyclesNum = function() { return this.$val.GetCyclesNum(); };
+	ptrType.methods = [{prop: "countAdjacents", name: "countAdjacents", pkg: "github.com/davidnotplay/gameoflife/game", typ: $funcType([$Int, $Int], [$Int], false)}, {prop: "GetMatrix", name: "GetMatrix", pkg: "", typ: $funcType([], [ptrType$2], false)}, {prop: "rules", name: "rules", pkg: "github.com/davidnotplay/gameoflife/game", typ: $funcType([$Bool, $Int, $Int, $Int, ptrType$1], [], false)}, {prop: "Cycle", name: "Cycle", pkg: "", typ: $funcType([], [$error], false)}, {prop: "GetCyclesNum", name: "GetCyclesNum", pkg: "", typ: $funcType([], [$Uint], false)}];
 	Game.init("github.com/davidnotplay/gameoflife/game", [{prop: "matrix", name: "matrix", embedded: false, exported: false, typ: ptrType$2, tag: ""}, {prop: "cycles", name: "cycles", embedded: false, exported: false, typ: $Uint, tag: ""}]);
 	Position.init($Int, 2);
 	$init = function() {
@@ -19390,7 +19416,7 @@ $packages["github.com/davidnotplay/gameoflife/game"] = (function() {
 	return $pkg;
 })();
 $packages["github.com/davidnotplay/gameoflife/gui"] = (function() {
-	var $pkg = {}, $init, fmt, game, js, math, time, Canvas, ptrType, sliceType, sliceType$1, ptrType$1, arrayType, ptrType$2, funcType, ptrType$3, pointColors, getCanvas, getGameSize, NewCanvas, showIcons, Start;
+	var $pkg = {}, $init, fmt, game, js, math, time, Canvas, ptrType, sliceType, ptrType$1, funcType, funcType$1, sliceType$1, ptrType$2, arrayType, ptrType$3, funcType$2, pointColors, getCanvas, getGameSize, NewCanvas, objToArray, getById, showIcon, handlerError, getFuncWillShowGameInfo, togglePlayingGame, showModal, handleMenu, Start;
 	fmt = $packages["fmt"];
 	game = $packages["github.com/davidnotplay/gameoflife/game"];
 	js = $packages["github.com/gopherjs/gopherjs/js"];
@@ -19410,12 +19436,14 @@ $packages["github.com/davidnotplay/gameoflife/gui"] = (function() {
 	});
 	ptrType = $ptrType(Canvas);
 	sliceType = $sliceType($emptyInterface);
+	ptrType$1 = $ptrType(js.Object);
+	funcType = $funcType([ptrType$1], [], false);
+	funcType$1 = $funcType([], [], false);
 	sliceType$1 = $sliceType(game.Position);
-	ptrType$1 = $ptrType(sliceType$1);
+	ptrType$2 = $ptrType(sliceType$1);
 	arrayType = $arrayType($Int, 2);
-	ptrType$2 = $ptrType(js.Object);
-	funcType = $funcType([ptrType$2], [], false);
 	ptrType$3 = $ptrType(game.Game);
+	funcType$2 = $funcType([ptrType], [], false);
 	getCanvas = function() {
 		return $global.document.getElementById($externalize("game-of-life", $String));
 	};
@@ -19479,9 +19507,9 @@ $packages["github.com/davidnotplay/gameoflife/gui"] = (function() {
 		return [canvas, $ifaceNil];
 	};
 	$pkg.NewCanvas = NewCanvas;
-	Canvas.ptr.prototype.run = function() {
-		var err, self, $s, $r;
-		/* */ $s = 0; var $f, $c = false; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; err = $f.err; self = $f.self; $s = $f.$s; $r = $f.$r; } s: while (true) { switch ($s) { case 0:
+	Canvas.ptr.prototype.run = function(callback) {
+		var callback, err, self, $s, $r;
+		/* */ $s = 0; var $f, $c = false; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; callback = $f.callback; err = $f.err; self = $f.self; $s = $f.$s; $r = $f.$r; } s: while (true) { switch ($s) { case 0:
 		self = this;
 		err = $ifaceNil;
 		/* while (true) { */ case 1:
@@ -19495,27 +19523,26 @@ $packages["github.com/davidnotplay/gameoflife/gui"] = (function() {
 			if (!($interfaceIsEqual(err, $ifaceNil))) {
 				$s = -1; return err;
 			}
+			$r = callback(self); /* */ $s = 4; case 4: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
 		/* } */ $s = 1; continue; case 2:
 		$s = -1; return $ifaceNil;
-		/* */ } return; } if ($f === undefined) { $f = { $blk: Canvas.ptr.prototype.run }; } $f.err = err; $f.self = self; $f.$s = $s; $f.$r = $r; return $f;
+		/* */ } return; } if ($f === undefined) { $f = { $blk: Canvas.ptr.prototype.run }; } $f.callback = callback; $f.err = err; $f.self = self; $f.$s = $s; $f.$r = $r; return $f;
 	};
-	Canvas.prototype.run = function() { return this.$val.run(); };
-	Canvas.ptr.prototype.Start = function() {
-		var _r, self, $s, $r;
-		/* */ $s = 0; var $f, $c = false; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; _r = $f._r; self = $f.self; $s = $f.$s; $r = $f.$r; } s: while (true) { switch ($s) { case 0:
+	Canvas.prototype.run = function(callback) { return this.$val.run(callback); };
+	Canvas.ptr.prototype.Start = function(callback) {
+		var _r, callback, self, $s, $r;
+		/* */ $s = 0; var $f, $c = false; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; _r = $f._r; callback = $f.callback; self = $f.self; $s = $f.$s; $r = $f.$r; } s: while (true) { switch ($s) { case 0:
 		self = this;
 		self.playing = true;
-		console.log("Playing");
-		_r = self.run(); /* */ $s = 1; case 1: if($c) { $c = false; _r = _r.$blk(); } if (_r && _r.$blk !== undefined) { break s; }
+		_r = self.run(callback); /* */ $s = 1; case 1: if($c) { $c = false; _r = _r.$blk(); } if (_r && _r.$blk !== undefined) { break s; }
 		$s = -1; return _r;
-		/* */ } return; } if ($f === undefined) { $f = { $blk: Canvas.ptr.prototype.Start }; } $f._r = _r; $f.self = self; $f.$s = $s; $f.$r = $r; return $f;
+		/* */ } return; } if ($f === undefined) { $f = { $blk: Canvas.ptr.prototype.Start }; } $f._r = _r; $f.callback = callback; $f.self = self; $f.$s = $s; $f.$r = $r; return $f;
 	};
-	Canvas.prototype.Start = function() { return this.$val.Start(); };
+	Canvas.prototype.Start = function(callback) { return this.$val.Start(callback); };
 	Canvas.ptr.prototype.Stop = function() {
 		var self;
 		self = this;
 		self.playing = false;
-		console.log("Stoping");
 	};
 	Canvas.prototype.Stop = function() { return this.$val.Stop(); };
 	Canvas.ptr.prototype.GetJsCanvas = function() {
@@ -19549,36 +19576,181 @@ $packages["github.com/davidnotplay/gameoflife/gui"] = (function() {
 		return err;
 	};
 	Canvas.prototype.ToggleMatrixPoint = function(x, y) { return this.$val.ToggleMatrixPoint(x, y); };
-	Canvas.ptr.prototype.TooglePlaying = function() {
+	Canvas.ptr.prototype.IsPlaying = function() {
 		var self;
 		self = this;
-		if (self.playing) {
-			self.Stop();
-			return $ifaceNil;
-		}
-		$go($methodVal(self, "Start"), []);
-		return $ifaceNil;
+		return self.playing;
 	};
-	Canvas.prototype.TooglePlaying = function() { return this.$val.TooglePlaying(); };
-	showIcons = function(icon) {
-		var _r, container, icon, img, $s, $r;
-		/* */ $s = 0; var $f, $c = false; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; _r = $f._r; container = $f.container; icon = $f.icon; img = $f.img; $s = $f.$s; $r = $f.$r; } s: while (true) { switch ($s) { case 0:
-		container = $global.document.getElementById($externalize("icons-container", $String));
+	Canvas.prototype.IsPlaying = function() { return this.$val.IsPlaying(); };
+	objToArray = function(arr) {
+		var arr;
+		return $global.Array.from(arr);
+	};
+	getById = function(id) {
+		var id;
+		return $global.document.getElementById($externalize(id, $String));
+	};
+	showIcon = function(icon) {
+		var _r, container, icon, iconSel, icons, $s, $r;
+		/* */ $s = 0; var $f, $c = false; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; _r = $f._r; container = $f.container; icon = $f.icon; iconSel = $f.iconSel; icons = $f.icons; $s = $f.$s; $r = $f.$r; } s: while (true) { switch ($s) { case 0:
+		container = getById("icons-container");
+		icons = container.getElementsByTagName($externalize("img", $String));
 		_r = fmt.Sprintf("#%s", new sliceType([new $String(icon)])); /* */ $s = 1; case 1: if($c) { $c = false; _r = _r.$blk(); } if (_r && _r.$blk !== undefined) { break s; }
-		img = container.querySelector($externalize(_r, $String));
-		container.getElementsByTagName($externalize("img", $String)).style = $externalize("display:none", $String);
+		iconSel = container.querySelector($externalize(_r, $String));
+		objToArray(icons).forEach($externalize((function(icon$1) {
+			var icon$1;
+			icon$1.style = $externalize("display:none", $String);
+			icon$1.className = $externalize("", $String);
+		}), funcType));
+		container.className = $externalize("show", $String);
+		iconSel.style = $externalize("display:block", $String);
+		iconSel.className = $externalize("start-animation", $String);
+		$r = time.Sleep(new time.Duration(0, 400000000)); /* */ $s = 2; case 2: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
 		container.className = $externalize("", $String);
-		img.style = $externalize("display:block", $String);
-		container.className = $externalize("icons-animation-start", $String);
-		console.log(container.className);
-		container.className = $externalize("icons-animation-start icons-animation", $String);
 		$s = -1; return;
-		/* */ } return; } if ($f === undefined) { $f = { $blk: showIcons }; } $f._r = _r; $f.container = container; $f.icon = icon; $f.img = img; $f.$s = $s; $f.$r = $r; return $f;
+		/* */ } return; } if ($f === undefined) { $f = { $blk: showIcon }; } $f._r = _r; $f.container = container; $f.icon = icon; $f.iconSel = iconSel; $f.icons = icons; $f.$s = $s; $f.$r = $r; return $f;
+	};
+	handlerError = function(err) {
+		var _r, err, $s, $r;
+		/* */ $s = 0; var $f, $c = false; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; _r = $f._r; err = $f.err; $s = $f.$s; $r = $f.$r; } s: while (true) { switch ($s) { case 0:
+		_r = err.Error(); /* */ $s = 1; case 1: if($c) { $c = false; _r = _r.$blk(); } if (_r && _r.$blk !== undefined) { break s; }
+		$global.console.error($externalize(_r, $String));
+		$global.alert($externalize("Error", $String));
+		$s = -1; return;
+		/* */ } return; } if ($f === undefined) { $f = { $blk: handlerError }; } $f._r = _r; $f.err = err; $f.$s = $s; $f.$r = $r; return $f;
+	};
+	getFuncWillShowGameInfo = function() {
+		var msg, msgEl;
+		msgEl = getById("menu-message");
+		msg = "Size: %dx%d. Cells enabled %d. Cycles: %d.";
+		return (function $b(c) {
+			var _r, _tmp, _tmp$1, _tmp$2, c, cn, h, m, p, text, w, $s, $r;
+			/* */ $s = 0; var $f, $c = false; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; _r = $f._r; _tmp = $f._tmp; _tmp$1 = $f._tmp$1; _tmp$2 = $f._tmp$2; c = $f.c; cn = $f.cn; h = $f.h; m = $f.m; p = $f.p; text = $f.text; w = $f.w; $s = $f.$s; $r = $f.$r; } s: while (true) { switch ($s) { case 0:
+			m = c.game.GetMatrix();
+			_tmp = m.GetWidth();
+			_tmp$1 = m.GetHeight();
+			_tmp$2 = m.GetPointsEnabled();
+			w = _tmp;
+			h = _tmp$1;
+			p = _tmp$2;
+			cn = c.game.GetCyclesNum();
+			_r = fmt.Sprintf(msg, new sliceType([new $Int(w), new $Int(h), new $Int(p), new $Uint(cn)])); /* */ $s = 1; case 1: if($c) { $c = false; _r = _r.$blk(); } if (_r && _r.$blk !== undefined) { break s; }
+			text = _r;
+			msgEl.innerHTML = $externalize(text, $String);
+			$s = -1; return;
+			/* */ } return; } if ($f === undefined) { $f = { $blk: $b }; } $f._r = _r; $f._tmp = _tmp; $f._tmp$1 = _tmp$1; $f._tmp$2 = _tmp$2; $f.c = c; $f.cn = cn; $f.h = h; $f.m = m; $f.p = p; $f.text = text; $f.w = w; $f.$s = $s; $f.$r = $r; return $f;
+		});
+	};
+	togglePlayingGame = function(canvas) {
+		var canvas, gameItemImg, $s, $r;
+		/* */ $s = 0; var $f, $c = false; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; canvas = $f.canvas; gameItemImg = $f.gameItemImg; $s = $f.$s; $r = $f.$r; } s: while (true) { switch ($s) { case 0:
+		canvas = [canvas];
+		gameItemImg = getById("menu-game").getElementsByTagName($externalize("img", $String))[0];
+		/* */ if (canvas[0].IsPlaying()) { $s = 1; continue; }
+		/* */ $s = 2; continue;
+		/* if (canvas[0].IsPlaying()) { */ case 1:
+			canvas[0].Stop();
+			$r = showIcon("stop-icon"); /* */ $s = 3; case 3: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
+			console.log("Stoped");
+			gameItemImg.src = $externalize("./images/play-b.svg", $String);
+			$s = -1; return;
+		/* } */ case 2:
+		$go((function(canvas) { return function $b() {
+			var _r, err, $s, $r;
+			/* */ $s = 0; var $f, $c = false; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; _r = $f._r; err = $f.err; $s = $f.$s; $r = $f.$r; } s: while (true) { switch ($s) { case 0:
+			_r = canvas[0].Start(getFuncWillShowGameInfo()); /* */ $s = 1; case 1: if($c) { $c = false; _r = _r.$blk(); } if (_r && _r.$blk !== undefined) { break s; }
+			err = _r;
+			/* */ if (!($interfaceIsEqual(err, $ifaceNil))) { $s = 2; continue; }
+			/* */ $s = 3; continue;
+			/* if (!($interfaceIsEqual(err, $ifaceNil))) { */ case 2:
+				canvas[0].Stop();
+				$r = handlerError(err); /* */ $s = 4; case 4: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
+			/* } */ case 3:
+			$s = -1; return;
+			/* */ } return; } if ($f === undefined) { $f = { $blk: $b }; } $f._r = _r; $f.err = err; $f.$s = $s; $f.$r = $r; return $f;
+		}; })(canvas), []);
+		$r = showIcon("play-icon"); /* */ $s = 4; case 4: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
+		console.log("Playing");
+		gameItemImg.src = $externalize("./images/stop-b.svg", $String);
+		$s = -1; return;
+		/* */ } return; } if ($f === undefined) { $f = { $blk: togglePlayingGame }; } $f.canvas = canvas; $f.gameItemImg = gameItemImg; $f.$s = $s; $f.$r = $r; return $f;
+	};
+	showModal = function(modalId) {
+		var i, modalId, modalc, modals;
+		modalc = getById("modal-container");
+		modals = modalc.querySelector($externalize("#modal-container > div", $String));
+		modals = objToArray(modals);
+		i = 0;
+		while (true) {
+			if (!(i < ($parseInt(modals.length) >> 0))) { break; }
+			modals[i].style = $externalize("display: none", $String);
+			i = i + (1) >> 0;
+		}
+		getById(modalId).style = $externalize("display: block", $String);
+		modalc.className = $externalize("show-modal", $String);
+	};
+	handleMenu = function(canvas) {
+		var aElems, canvas, changeClass;
+		$global.menuInterval = null;
+		aElems = objToArray($global.document.querySelectorAll($externalize("#menu-container .animation", $String)));
+		changeClass = (function(cname) {
+			var cname, i;
+			i = 0;
+			while (true) {
+				if (!(i < ($parseInt(aElems.length) >> 0))) { break; }
+				aElems[i].className = $externalize(cname, $String);
+				i = i + (1) >> 0;
+			}
+		});
+		canvas.GetJsCanvas().addEventListener($externalize("mousemove", $String), $externalize((function() {
+			$go((function $b() {
+				var intId, $s, $r;
+				/* */ $s = 0; var $f, $c = false; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; intId = $f.intId; $s = $f.$s; $r = $f.$r; } s: while (true) { switch ($s) { case 0:
+				intId = $global.menuInterval;
+				/* */ if (!(intId === null)) { $s = 1; continue; }
+				/* */ $s = 2; continue;
+				/* if (!(intId === null)) { */ case 1:
+					$global.clearTimeout(intId);
+					$s = 3; continue;
+				/* } else { */ case 2:
+					$r = changeClass("animation animation-enter"); /* */ $s = 4; case 4: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
+				/* } */ case 3:
+				intId = $global.setTimeout($externalize((function $b() {
+					var $s, $r;
+					/* */ $s = 0; var $f, $c = false; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; $s = $f.$s; $r = $f.$r; } s: while (true) { switch ($s) { case 0:
+					$r = changeClass("animation animation-leave"); /* */ $s = 1; case 1: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
+					$global.menuInterval = null;
+					$s = -1; return;
+					/* */ } return; } if ($f === undefined) { $f = { $blk: $b }; } $f.$s = $s; $f.$r = $r; return $f;
+				}), funcType$1), 3000);
+				$global.menuInterval = intId;
+				$s = -1; return;
+				/* */ } return; } if ($f === undefined) { $f = { $blk: $b }; } $f.intId = intId; $f.$s = $s; $f.$r = $r; return $f;
+			}), []);
+		}), funcType$1));
+		getById("menu-info").addEventListener($externalize("click", $String), $externalize((function(evt) {
+			var evt;
+			$go((function() {
+				evt.preventDefault();
+				showModal("modal-info");
+			}), []);
+		}), funcType));
+		getById("menu-game").addEventListener($externalize("click", $String), $externalize((function(evt) {
+			var evt;
+			$go((function $b() {
+				var $s, $r;
+				/* */ $s = 0; var $f, $c = false; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; $s = $f.$s; $r = $f.$r; } s: while (true) { switch ($s) { case 0:
+				evt.preventDefault();
+				$r = togglePlayingGame(canvas); /* */ $s = 1; case 1: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
+				$s = -1; return;
+				/* */ } return; } if ($f === undefined) { $f = { $blk: $b }; } $f.$s = $s; $f.$r = $r; return $f;
+			}), []);
+		}), funcType));
 	};
 	Start = function() {
-		var _tuple, canvas;
+		var _tuple, canvas, closeModalFun;
 		canvas = ptrType.nil;
-		_tuple = NewCanvas($newDataPointer(new sliceType$1([]), ptrType$1));
+		_tuple = NewCanvas($newDataPointer(new sliceType$1([]), ptrType$2));
 		canvas = _tuple[0];
 		canvas.GetJsCanvas().addEventListener($externalize("click", $String), $externalize((function(evt) {
 			var evt;
@@ -19597,8 +19769,7 @@ $packages["github.com/davidnotplay/gameoflife/gui"] = (function() {
 				/* */ if (($parseInt(evt.charCode) >> 0) === 32) { $s = 1; continue; }
 				/* */ $s = 2; continue;
 				/* if (($parseInt(evt.charCode) >> 0) === 32) { */ case 1:
-					canvas.TooglePlaying();
-					$r = showIcons("play-icon"); /* */ $s = 3; case 3: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
+					$r = togglePlayingGame(canvas); /* */ $s = 3; case 3: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
 				/* } */ case 2:
 				$s = -1; return;
 				/* */ } return; } if ($f === undefined) { $f = { $blk: $b }; } $f.$s = $s; $f.$r = $r; return $f;
@@ -19609,14 +19780,22 @@ $packages["github.com/davidnotplay/gameoflife/gui"] = (function() {
 			$go((function() {
 				var _tuple$1;
 				canvas.Stop();
-				_tuple$1 = NewCanvas($newDataPointer(new sliceType$1([]), ptrType$1));
+				_tuple$1 = NewCanvas($newDataPointer(new sliceType$1([]), ptrType$2));
 				canvas = _tuple$1[0];
 			}), []);
 		}), funcType));
+		handleMenu(canvas);
+		closeModalFun = (function() {
+			$go((function() {
+				getById("modal-container").className = $externalize("hide-modal", $String);
+			}), []);
+		});
+		getById("close-modal").addEventListener($externalize("click", $String), $externalize(closeModalFun, funcType$1));
+		getById("modal-container").addEventListener($externalize("click", $String), $externalize(closeModalFun, funcType$1));
 	};
 	$pkg.Start = Start;
-	ptrType.methods = [{prop: "generate", name: "generate", pkg: "github.com/davidnotplay/gameoflife/gui", typ: $funcType([], [$error], false)}, {prop: "run", name: "run", pkg: "github.com/davidnotplay/gameoflife/gui", typ: $funcType([], [$error], false)}, {prop: "Start", name: "Start", pkg: "", typ: $funcType([], [$error], false)}, {prop: "Stop", name: "Stop", pkg: "", typ: $funcType([], [], false)}, {prop: "GetJsCanvas", name: "GetJsCanvas", pkg: "", typ: $funcType([], [ptrType$2], false)}, {prop: "ToggleMatrixPoint", name: "ToggleMatrixPoint", pkg: "", typ: $funcType([$Int, $Int], [$error], false)}, {prop: "TooglePlaying", name: "TooglePlaying", pkg: "", typ: $funcType([], [$error], false)}];
-	Canvas.init("github.com/davidnotplay/gameoflife/gui", [{prop: "canvas", name: "canvas", embedded: false, exported: false, typ: ptrType$2, tag: ""}, {prop: "game", name: "game", embedded: false, exported: false, typ: ptrType$3, tag: ""}, {prop: "playing", name: "playing", embedded: false, exported: false, typ: $Bool, tag: ""}]);
+	ptrType.methods = [{prop: "generate", name: "generate", pkg: "github.com/davidnotplay/gameoflife/gui", typ: $funcType([], [$error], false)}, {prop: "run", name: "run", pkg: "github.com/davidnotplay/gameoflife/gui", typ: $funcType([funcType$2], [$error], false)}, {prop: "Start", name: "Start", pkg: "", typ: $funcType([funcType$2], [$error], false)}, {prop: "Stop", name: "Stop", pkg: "", typ: $funcType([], [], false)}, {prop: "GetJsCanvas", name: "GetJsCanvas", pkg: "", typ: $funcType([], [ptrType$1], false)}, {prop: "ToggleMatrixPoint", name: "ToggleMatrixPoint", pkg: "", typ: $funcType([$Int, $Int], [$error], false)}, {prop: "IsPlaying", name: "IsPlaying", pkg: "", typ: $funcType([], [$Bool], false)}];
+	Canvas.init("github.com/davidnotplay/gameoflife/gui", [{prop: "canvas", name: "canvas", embedded: false, exported: false, typ: ptrType$1, tag: ""}, {prop: "game", name: "game", embedded: false, exported: false, typ: ptrType$3, tag: ""}, {prop: "playing", name: "playing", embedded: false, exported: false, typ: $Bool, tag: ""}]);
 	$init = function() {
 		$pkg.$init = function() {};
 		/* */ var $f, $c = false, $s = 0, $r; if (this !== undefined && this.$blk !== undefined) { $f = this; $c = true; $s = $f.$s; $r = $f.$r; } s: while (true) { switch ($s) { case 0:
@@ -19625,13 +19804,13 @@ $packages["github.com/davidnotplay/gameoflife/gui"] = (function() {
 		$r = js.$init(); /* */ $s = 3; case 3: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
 		$r = math.$init(); /* */ $s = 4; case 4: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
 		$r = time.$init(); /* */ $s = 5; case 5: if($c) { $c = false; $r = $r.$blk(); } if ($r && $r.$blk !== undefined) { break s; }
-		pointColors = $makeMap($Bool.keyFor, [{ k: false, v: "#444" }, { k: true, v: "#ff0" }]);
+		pointColors = $makeMap($Bool.keyFor, [{ k: false, v: "#666666" }, { k: true, v: "#ffeb3b" }]);
 		/* */ } return; } if ($f === undefined) { $f = { $blk: $init }; } $f.$s = $s; $f.$r = $r; return $f;
 	};
 	$pkg.$init = $init;
 	return $pkg;
 })();
-$packages["github.com/davidnotplay/gameoflife/doc"] = (function() {
+$packages["main"] = (function() {
 	var $pkg = {}, $init, gui, main;
 	gui = $packages["github.com/davidnotplay/gameoflife/gui"];
 	main = function() {
@@ -19651,10 +19830,10 @@ $packages["github.com/davidnotplay/gameoflife/doc"] = (function() {
 	return $pkg;
 })();
 $synthesizeMethods();
-var $mainPkg = $packages["github.com/davidnotplay/gameoflife/doc"];
+var $mainPkg = $packages["main"];
 $packages["runtime"].$init();
 $go($mainPkg.$init, []);
 $flushConsole();
 
 }).call(this);
-//# sourceMappingURL=doc.js.map
+//# sourceMappingURL=main.js.map
