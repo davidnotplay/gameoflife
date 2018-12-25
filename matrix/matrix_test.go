@@ -184,3 +184,26 @@ func TestGetSize(t *testing.T) {
 	assert.Equal(width, min, "Invalid width.")
 	assert.Equal(height, min, "Invalid height.")
 }
+
+// Test the func GetPointEnableds
+func TestGetPointsEnabledFunc(t *testing.T) {
+	assert := assert.New(t)
+	m, _ := New(min, min)
+
+	assert.Equal(m.GetPointsEnabled(), 0, "Invalid points enabled")
+
+	m.EnablePoint(0, 0)
+	assert.Equal(m.GetPointsEnabled(), 1, "Invalid points enabled")
+	m.EnablePoint(1, 1)
+	assert.Equal(m.GetPointsEnabled(), 2, "Invalid points enabled")
+	m.EnablePoint(1, 1)
+	assert.Equal(m.GetPointsEnabled(), 2, "Invalid points enabled")
+
+	m.DisablePoint(1, 1)
+	assert.Equal(m.GetPointsEnabled(), 1, "Invalid points enabled")
+	m.DisablePoint(1, 1)
+	assert.Equal(m.GetPointsEnabled(), 1, "Invalid points enabled")
+	m.DisablePoint(0, 0)
+	assert.Equal(m.GetPointsEnabled(), 0, "Invalid points enabled")
+
+}

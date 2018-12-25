@@ -418,3 +418,16 @@ func TestCycleFunc(t *testing.T) {
 		}
 	}
 }
+
+// Test the cycles number.
+func TestFuncGetCyclesNum(t *testing.T) {
+	var i uint
+	assert := assert.New(t)
+	g, _ := New(min, min, []Position{{1, 1}, {2, 1}, {3, 1}})
+
+	assert.Equal(g.GetCyclesNum(), uint(0), "Invalid number of cyles.")
+	for i = 1; i <= 10; i++ {
+		g.Cycle()
+		assert.Equal(g.GetCyclesNum(), uint(i), "Invalid number of cyles.")
+	}
+}

@@ -23,9 +23,9 @@ func New(width, height int, positions []Position) (*Game, error) {
 		return nil, err
 	}
 
-	// make the game and enable his initial postitions.
 	g := &Game{m, 0}
 
+	// Enable the initial positions.
 	for _, position := range positions {
 		err = m.EnablePoint(position[0], position[1])
 	}
@@ -130,3 +130,9 @@ func (self *Game) Cycle() (err error) {
 	self.cycles++
 	return
 }
+
+// Get the number of cycles.
+func (self *Game) GetCyclesNum() uint {
+	return self.cycles
+}
+

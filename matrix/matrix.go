@@ -23,6 +23,9 @@ type Matrix struct {
 
 	// Slice vertical size.
 	height int
+
+	// points enabled.
+	enabled int
 }
 
 // Check if the `x`, `y` position are inside range of the matrix.
@@ -59,7 +62,7 @@ func New(width, height int) (*Matrix, error) {
 		return nil, err
 	}
 
-	m := &Matrix{createEmptyMatrixArray(width, height), width, height}
+	m := &Matrix{createEmptyMatrixArray(width, height), width, height, 0}
 	return m, nil
 }
 
@@ -67,20 +70,33 @@ func New(width, height int) (*Matrix, error) {
 // Whether the position is invalid returns an error.
 func (self *Matrix) EnablePoint(x, y int) (e error) {
 	e = checkRange(self, x, y)
-	if e == nil {
-		self.matrix[x][y] = MATRIX_POINT_ENABLED
+	if  e!= nil {
+		return e
 	}
-	return
+
+	if self.matrix[x][y] != MATRIX_POINT_ENABLED {
+		self.matrix[x][y] = MATRIX_POINT_ENABLED
+		self.enabled++
+	}
+
+	return nil
 }
 
 // Disable the point of the position `x`, `y` of the matrix stored in `self`.
 // Whether the position is invalid returns an error.
 func (self *Matrix) DisablePoint(x, y int) (e error) {
 	e = checkRange(self, x, y)
-	if e == nil {
-		self.matrix[x][y] = MATRIX_POINT_DISABLED
+
+	if e != nil {
+		return e
 	}
-	return
+
+	if self.matrix[x][y] != MATRIX_POINT_DISABLED {
+		self.matrix[x][y] = MATRIX_POINT_DISABLED
+		self.enabled--
+	}
+
+	return nil
 }
 
 // Checks if the point of the position `x`, `y` of the matrix stored in `self` is enabled.
@@ -127,6 +143,11 @@ func (self *Matrix) GetHeight() int {
 // returns the width and height of the matrix.
 func (self *Matrix) GetSize() (int, int) {
 	return self.width, self.height
+}
+
+// Get the points enabled.
+func (self *Matrix) GetPointsEnabled() int {
+	return self.enabled
 }
 
 func (matrix Matrix) String() string {
