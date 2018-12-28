@@ -43,7 +43,6 @@ func handlerError(err error) {
 	js.Global.Call("alert", "Error")
 }
 
-
 func getFuncWillShowGameInfo() func(c *Canvas) {
 	msgEl := getById("menu-message")
 	msg := "Size: %dx%d. Cells enabled %d. Cycles: %d."
@@ -56,7 +55,6 @@ func getFuncWillShowGameInfo() func(c *Canvas) {
 		msgEl.Set("innerHTML", text)
 	}
 }
-
 
 func togglePlayingGame(canvas *Canvas) {
 	gameItemImg := getById("menu-game").Call("getElementsByTagName", "img").Index(0)
@@ -92,7 +90,6 @@ func showModal(modalId string) {
 	for i := 0; i < modals.Get("length").Int(); i++ {
 		modals.Index(i).Set("style", "display: none")
 	}
-
 
 	// show the modal selected.
 	getById(modalId).Set("style", "display: block")

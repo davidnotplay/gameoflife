@@ -135,4 +135,3 @@ func (self *Game) Cycle() (err error) {
 func (self *Game) GetCyclesNum() uint {
 	return self.cycles
 }
-

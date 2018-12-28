@@ -70,7 +70,7 @@ func New(width, height int) (*Matrix, error) {
 // Whether the position is invalid returns an error.
 func (self *Matrix) EnablePoint(x, y int) (e error) {
 	e = checkRange(self, x, y)
-	if  e!= nil {
+	if e != nil {
 		return e
 	}
 
